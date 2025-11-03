@@ -1,5 +1,6 @@
 # ===============================================
 # setup_tools.ps1 - 一键初始化 Rust + Python + Rye 开发环境
+# only for Windows
 # ===============================================
 
 Write-Host "=== Installing Rust tools ==="

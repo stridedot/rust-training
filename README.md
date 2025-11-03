@@ -92,3 +92,8 @@ cargo install cargo-nextest --locked
 
 ### 简化版安装
 运行 `setup_tools.ps1` 脚本即可安装所有工具。
+
+
+## 功能列表
+- cli: 命令行工具
+    - csv 转为 json, yaml, toml
