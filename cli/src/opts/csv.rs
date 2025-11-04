@@ -17,7 +17,7 @@ pub struct CsvCmd {
     #[arg(long, default_value = "output.json")]
     pub output: String,
 
-    #[arg(long, default_value = "json")]
+    #[arg(long, value_parser = parse_format, default_value = "json")]
     pub format: OutputFormat,
 
     #[arg(long, default_value_t = ',')]
@@ -30,5 +30,14 @@ pub struct CsvCmd {
 impl CmdExecutor for CsvCmd {
     async fn execute(&self) -> anyhow::Result<()> {
         crate::process::csv::process_csv(&self.input, &self.output, &self.format).await
+    }
+}
+
+fn parse_format(format: &str) -> Result<OutputFormat, String> {
+    match format {
+        "json" => Ok(OutputFormat::Json),
+        "yaml" => Ok(OutputFormat::Yaml),
+        "toml" => Ok(OutputFormat::Toml),
+        _ => Err(format!("Unknown output format: {}", format)),
     }
 }

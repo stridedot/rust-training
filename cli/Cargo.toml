@@ -13,3 +13,4 @@ serde_json = { workspace = true }
 serde_yaml = "0.9.34"
 toml = "0.9.8"
 tokio = { workspace = true }
+rand = "0.9.2"

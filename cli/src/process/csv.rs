@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use csv::Reader;
 use serde::{Deserialize, Serialize};
 
@@ -24,26 +26,29 @@ pub struct Player {
 
 pub async fn process_csv(input: &str, output: &str, format: &OutputFormat) -> anyhow::Result<()> {
     let mut reader = Reader::from_path(input)?;
+    let headers = reader.headers()?.clone();
+    // 将 headers 转换为小写
+    let headers = headers.iter().map(|s| s.to_lowercase()).collect::<Vec<_>>();
 
-    // 这种方式无法改变 key 的大小写
-    // let headers = reader.headers()?.clone();
-    // let mut players = Vec::new();
-
-    // for record in reader.records() {
-    //     let record = record?;
-    //     let mut m = HashMap::new();
-
-    //     for (header, value) in headers.iter().zip(record.iter()) {
-    //         m.insert(header.to_string(), value.to_string());
-    //     }
-
-    //     players.push(m);
+    // 此方式无法动态获取 headers
+    // let mut players: Vec<Player> = Vec::new();
+    // for record in reader.deserialize() {
+    //     let player: Player = record?;
+    //     players.push(player);
     // }
 
-    let mut players: Vec<Player> = Vec::new();
-    for record in reader.deserialize() {
-        let player: Player = record?;
-        players.push(player);
+    // 这种方式无法改变 key 的大小写
+    let mut players = Vec::new();
+
+    for record in reader.records() {
+        let record = record?;
+        let mut m = HashMap::new();
+
+        for (header, value) in headers.iter().zip(record.iter()) {
+            m.insert(header.to_string(), value.to_string());
+        }
+
+        players.push(m);
     }
 
     match format {

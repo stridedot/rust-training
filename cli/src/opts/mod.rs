@@ -1,4 +1,5 @@
 pub mod csv;
+pub mod genpass;
 
 use clap::Parser;
 
@@ -15,12 +16,16 @@ pub struct Args {
 pub enum SubCommand {
     #[command(name = "csv", about = "convert CSV file to JSON or...")]
     Csv(csv::CsvCmd),
+
+    #[command(name = "genpass", about = "generate random password")]
+    GenPass(genpass::GenPassCmd),
 }
 
 impl CmdExecutor for SubCommand {
     async fn execute(&self) -> anyhow::Result<()> {
         match self {
             SubCommand::Csv(cmd) => cmd.execute().await,
+            SubCommand::GenPass(cmd) => cmd.execute().await,
         }
     }
 }
