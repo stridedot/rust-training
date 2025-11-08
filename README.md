@@ -8,6 +8,7 @@
 - csv 转为 json, yaml, toml
 - 生成随机密码
 - base64 编码/解码
+- 使用 Blake3 哈希，使用 Ed25519 签名/验证
 
 
 ### chat 聊天服务

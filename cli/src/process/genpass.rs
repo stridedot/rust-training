@@ -12,7 +12,7 @@ pub async fn process_genpass(
     include_digit: bool,
     include_symbol: bool,
 ) -> anyhow::Result<String> {
-    let mut rng = rand::rng();
+    let mut rng = rand::thread_rng();
     let mut pool = String::new();
     let mut password_chars = Vec::new();
 

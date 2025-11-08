@@ -1,6 +1,7 @@
 pub mod base64;
 pub mod csv;
 pub mod genpass;
+pub mod text;
 
 use clap::Parser;
 
@@ -23,6 +24,9 @@ pub enum SubCommand {
 
     #[command(subcommand, name = "base64", about = "base64 encode or decode")]
     Base64(base64::Base64Cmd),
+
+    #[command(subcommand, name = "text", about = "text sign or hash")]
+    Text(text::TextCmd),
 }
 
 impl CmdExecutor for SubCommand {
@@ -31,6 +35,7 @@ impl CmdExecutor for SubCommand {
             SubCommand::Csv(cmd) => cmd.execute().await,
             SubCommand::GenPass(cmd) => cmd.execute().await,
             SubCommand::Base64(cmd) => cmd.execute().await,
+            SubCommand::Text(cmd) => cmd.execute().await,
         }
     }
 }
