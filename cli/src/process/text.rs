@@ -50,8 +50,6 @@ pub async fn process_verify(
     format: &TextSignFormat,
 ) -> anyhow::Result<bool> {
     let mut reader = utils::get_reader(input).await?;
-    let mut buf = Vec::new();
-    reader.read_to_end(&mut buf)?;
 
     let sig = BASE64_URL_SAFE_NO_PAD.decode(sig)?;
 
@@ -96,7 +94,7 @@ impl TextSign for Blake3 {
     fn sign<T: Read>(&self, reader: &mut T) -> anyhow::Result<Vec<u8>> {
         let mut buf = Vec::new();
         reader.read_to_end(&mut buf)?;
-
+        println!("input: `{:?}`", buf);
         let hash = blake3::keyed_hash(&self.key, &buf);
 
         Ok(hash.as_bytes().to_vec())
@@ -107,7 +105,7 @@ impl TextVerify for Blake3 {
     fn verify<T: Read>(&self, reader: &mut T, sig: &[u8]) -> anyhow::Result<bool> {
         let mut buf = Vec::new();
         reader.read_to_end(&mut buf)?;
-
+        println!("input: `{:?}`", buf);
         let hash = blake3::keyed_hash(&self.key, &buf);
 
         Ok(hash.as_bytes() == sig)

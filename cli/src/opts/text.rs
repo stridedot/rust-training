@@ -6,6 +6,8 @@ use crate::{CmdExecutor, opts, process::text};
 
 #[derive(Debug, Parser)]
 pub enum TextCmd {
+    // argo run --package cli -- text generate --format blake3
+    // cargo run --package cli -- text generate --format ed25519
     #[command(name = "generate", about = "generate a key")]
     Generate {
         #[arg(long, value_parser = parse_format, default_value = "blake3")]
@@ -15,31 +17,35 @@ pub enum TextCmd {
         output: PathBuf,
     },
 
+    // argo run --package cli -- text sign --key ./cli/fixtures/blake3.key --format blake3
+    // cargo run --package cli -- text sign --format ed25519 --key ./cli/fixtures/ed25519_signing.key
     #[command(name = "sign", about = "sign a message with a private key")]
     Sign {
-        #[arg(long, value_parser = opts::verify_file, default_value = "-")]
-        input: String,
-
-        #[arg(long, value_parser = opts::verify_file)]
-        key: String,
-
         #[arg(long, value_parser = parse_format, default_value = "blake3")]
         format: TextSignFormat,
-    },
-
-    #[command(name = "verify", about = "verify a message with a public key")]
-    Verify {
-        #[arg(long, value_parser = opts::verify_file, default_value = "-")]
-        input: String,
 
         #[arg(long, value_parser = opts::verify_file)]
         key: String,
+
+        #[arg(long, value_parser = opts::verify_file, default_value = "-")]
+        input: String,
+    },
+
+    // argo run --package cli -- text verify --key ./cli/fixtures/blake3.key --format blake3 --sig xxx
+    // cargo run --package cli -- text verify --format ed25519 --key ./cli/fixtures/ed25519_verifying.key --sig xxx
+    #[command(name = "verify", about = "verify a message with a public key")]
+    Verify {
+        #[arg(long, value_parser = parse_format, default_value = "blake3")]
+        format: TextSignFormat,
+
+        #[arg(long, value_parser = opts::verify_file)]
+        key: String,
+
+        #[arg(long, value_parser = opts::verify_file, default_value = "-")]
+        input: String,
 
         #[arg(long)]
         sig: String,
-
-        #[arg(long, value_parser = parse_format, default_value = "blake3")]
-        format: TextSignFormat,
     },
 }
 
