@@ -1,7 +1,10 @@
 pub mod base64;
 pub mod csv;
 pub mod genpass;
+pub mod http;
 pub mod text;
+
+use std::path::PathBuf;
 
 use clap::Parser;
 
@@ -27,6 +30,9 @@ pub enum SubCommand {
 
     #[command(subcommand, name = "text", about = "text sign or hash")]
     Text(text::TextCmd),
+
+    #[command(subcommand, name = "http", about = "file server")]
+    Http(http::HttpCmd),
 }
 
 impl CmdExecutor for SubCommand {
@@ -36,6 +42,7 @@ impl CmdExecutor for SubCommand {
             SubCommand::GenPass(cmd) => cmd.execute().await,
             SubCommand::Base64(cmd) => cmd.execute().await,
             SubCommand::Text(cmd) => cmd.execute().await,
+            SubCommand::Http(cmd) => cmd.execute().await,
         }
     }
 }
@@ -45,6 +52,16 @@ pub fn verify_file(input: &str) -> Result<String, String> {
         Ok(input.to_string())
     } else {
         Err(format!("Input File not found: {}", input))
+    }
+}
+
+pub fn verify_path(filepath: &str) -> anyhow::Result<PathBuf> {
+    let path = PathBuf::from(filepath);
+    if path.exists() && path.is_dir() {
+        Ok(path)
+    } else {
+        std::fs::create_dir_all(&path)?;
+        Ok(path)
     }
 }
 

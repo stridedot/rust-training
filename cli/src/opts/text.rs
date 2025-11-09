@@ -2,7 +2,11 @@ use std::path::PathBuf;
 
 use clap::Parser;
 
-use crate::{CmdExecutor, opts, process::text};
+use crate::{
+    CmdExecutor,
+    opts::{self, verify_path},
+    process::text,
+};
 
 #[derive(Debug, Parser)]
 pub enum TextCmd {
@@ -86,16 +90,6 @@ impl CmdExecutor for TextCmd {
         }
 
         Ok(())
-    }
-}
-
-fn verify_path(filepath: &str) -> anyhow::Result<PathBuf> {
-    let path = PathBuf::from(filepath);
-    if path.exists() && path.is_dir() {
-        Ok(path)
-    } else {
-        std::fs::create_dir_all(&path)?;
-        Ok(path)
     }
 }
 
