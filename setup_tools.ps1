@@ -27,6 +27,8 @@ if (-not (Get-Command rye -ErrorAction SilentlyContinue)) {
 # 设置 RYE_HOME
 $env:RYE_HOME = "D:\Rust\rye"
 
+rye init
+
 # 固定 Python 3.12
 rye pin cpython@3.12
 
