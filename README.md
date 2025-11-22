@@ -10,9 +10,18 @@
 - base64 编码/解码
 - 使用 Blake3 哈希，使用 Ed25519 签名/验证
 - 文件服务器
+
+### 多线程
 - 多线程的使用
 - 简单的 redis server 实现
 
+### 生态系统
+- 错误处理
+- 日志处理：jaeger 日志
+- Serde 序列化/反序列化
+- tokio 异步编程
+- BytesMut 的使用
+- 简单 nginx 服务器
 
 ### chat 聊天服务
 
