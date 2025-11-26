@@ -22,6 +22,7 @@
 - tokio 异步编程
 - BytesMut 的使用
 - 简单 nginx 服务器
+- sqlx 的简单使用
 
 ### chat 聊天服务
 
