@@ -23,6 +23,7 @@
 - BytesMut 的使用
 - 简单 nginx 服务器
 - sqlx 的简单使用
+- 聊天服务器
 
 ### chat 聊天服务
 

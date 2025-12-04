@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Sent Events</title>
+</head>
+
+<body>
+    <h1>Server Sent Events</h1>
+    <script>
+        let token = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjAxNzA4MzcsImV4cCI6MTc2MDc3NTYzNywibmJmIjoxNzYwMTcwODM3LCJpc3MiOiJjaGF0X3NlcnZlciIsImF1ZCI6ImNoYXRfd2ViIiwiaWQiOjEsIndvcmtzcGFjZV9pZCI6MSwidXNlcm5hbWUiOiJOb2FoIiwiZW1haWwiOiJOb2FoQGdtYWlsLmNvbSIsImNyZWF0ZWRfYXQiOiIyMDI1LTA5LTI2VDA3OjMxOjIzLjc4NDY1NVoifQ.Oezeek8ReSmaipnXknXTrhYcIPPiFOY5Ny5GzpwR9-G7e29dJZQqvhHEbTF8U5yQiheGPNFApKHX9dD6p91dBA';
+        const source = new EventSource('/events?token=' + token);
+        source.onmessage = (event) => {
+            console.log('Message:', event.data);
+        };
+        source.addEventListener('NewChat', (event) => {
+            console.log('NewChat:', event.data);
+        });
+        source.addEventListener('AddToChat', (event) => {
+            console.log('AddToChat:', event.data);
+        });
+        source.addEventListener('RemoveFromChat', (event) => {
+            console.log('RemoveFromChat:', event.data);
+        });
+        source.addEventListener('NewMessage', (event) => {
+            console.log('NewMessage:', event.data);
+        });
+    </script>
+</body>
+
+</html>

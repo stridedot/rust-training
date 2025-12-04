@@ -1,0 +1,20 @@
+[package]
+name = "chat_core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[dependencies]
+anyhow = { workspace = true }
+argon2 = { version = "0.5.3", features = ["std"] }
+axum = { workspace = true }
+axum-extra = { version = "0.12.2", features = ["typed-header"] }
+chrono = { workspace = true }
+jwt-simple = { workspace = true }
+serde = { workspace = true }
+sqlx = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tower = { workspace = true }
+tracing = { workspace = true }
+utoipa = { workspace = true }

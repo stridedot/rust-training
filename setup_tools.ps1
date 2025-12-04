@@ -18,14 +18,14 @@ Write-Host ""
 # ===============================================
 Write-Host "=== Setting up Rye ==="
 
+# 设置 RYE_HOME
+$env:RYE_HOME = "D:\Rust\rye"
+
 # 检查 Rye 是否存在
 if (-not (Get-Command rye -ErrorAction SilentlyContinue)) {
     Write-Host "Installing Rye..."
     irm https://rye.astral.sh/get | iex
 }
-
-# 设置 RYE_HOME
-$env:RYE_HOME = "D:\Rust\rye"
 
 rye init
 

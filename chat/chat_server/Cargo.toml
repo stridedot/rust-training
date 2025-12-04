@@ -1,0 +1,38 @@
+[package]
+name = "chat_server"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[features]
+default = []
+test-util = ["http-body-util", "sqlx-db-tester"]
+sqlx-db-tester = ["dep:sqlx-db-tester"]
+
+[dependencies]
+chat_core = { workspace = true }
+
+anyhow = { workspace = true }
+argon2 = "0.5.3"
+axum = { workspace = true }
+jwt-simple = { workspace = true }
+opentelemetry = { workspace = true }
+opentelemetry-otlp = { workspace = true }
+opentelemetry_sdk = { workspace = true }
+serde = { workspace = true }
+rand = { workspace = true }
+serde_yaml = { workspace = true }
+sqlx = { workspace = true }
+sqlx-db-tester = { version = "0.7.1", optional = true }
+http-body-util = { version = "0.1.3", optional = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tower-http = { workspace = true }
+tracing = { workspace = true }
+tracing-appender = { workspace = true }
+tracing-opentelemetry = { workspace = true }
+tracing-subscriber = { workspace = true }
+utoipa = { workspace = true }
+utoipa-swagger-ui = { workspace = true }
+utoipa-redoc = { workspace = true }
+utoipa-rapidoc = { workspace = true }
