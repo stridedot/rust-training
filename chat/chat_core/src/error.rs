@@ -19,7 +19,7 @@ pub enum AppError {
     #[error("IO error, {0}")]
     IOError(#[from] std::io::Error),
 
-    #[error("JWT error: {0}")]
+    #[error("JWT error, {0}")]
     JwtError(#[from] jwt_simple::Error),
 
     // 业务错误 4xx
@@ -47,6 +47,6 @@ impl IntoResponse for AppError {
         };
 
         let json: ApiResponse<()> = ApiResponse::error(status, self.to_string());
-        (status, Json(json)).into_response()
+        (StatusCode::OK, Json(json)).into_response()
     }
 }

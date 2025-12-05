@@ -35,7 +35,7 @@ impl<T> ApiResponse<T> {
     }
 }
 
-impl<T: serde::Serialize> IntoResponse for ApiResponse<T> {
+impl<T: Serialize> IntoResponse for ApiResponse<T> {
     fn into_response(self) -> Response {
         (StatusCode::OK, axum::Json(self)).into_response()
     }

@@ -1,0 +1,33 @@
+### test index
+GET http://localhost:9090
+Cache-Control: no-cache
+
+### test sign up
+POST http://localhost:9090/api/sign-up
+Content-Type: application/json
+
+{
+    "username": "Noah1",
+    "email": "Noah1@gmail.com",
+    "password": "123456",
+    "workspace": "Noah1"
+}
+
+### test sign in
+# @name signin
+POST http://localhost:9090/api/sign-in
+Content-Type: application/json
+
+{
+    "email": "Noah@gmail.com",
+    "password": "123456"
+}
+
+###
+
+@token = {{signin.response.body.data.token}}
+
+### test get user list
+GET http://localhost:9090/api/user/list
+Cache-Control: no-cache
+Authorization: Bearer {{ token }}

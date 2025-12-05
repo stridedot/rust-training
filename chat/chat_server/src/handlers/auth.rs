@@ -1,5 +1,6 @@
-use axum::{Json, extract::State, response::IntoResponse};
+use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 
+use crate::responses::AuthOutput;
 use crate::{
     AppState,
     repos::user::UserRepo,
@@ -13,31 +14,37 @@ pub async fn sign_up(
 ) -> Result<impl IntoResponse, AppError> {
     let user = User::create(&req, &state.pg_pool).await?;
     let token = state.sign_key.sign(user)?;
-    let body = ApiResponse::success(token);
 
-    Ok(body.into_response())
+    Ok(ApiResponse::success(AuthOutput { token }))
 }
 
 pub async fn sign_in(
-    State(_): State<AppState>,
-    Json(_): Json<SignInReq>,
+    State(state): State<AppState>,
+    Json(req): Json<SignInReq>,
 ) -> Result<impl IntoResponse, AppError> {
-    Ok(())
+    let user = User::find_by_email(&req.email, &state.pg_pool).await?;
+    let body = match user {
+        Some(user) => {
+            let token = state.sign_key.sign(user)?;
+            ApiResponse::success(AuthOutput { token })
+        }
+        None => ApiResponse::error(
+            StatusCode::FORBIDDEN,
+            format!("user not found: {}", req.email),
+        ),
+    };
+
+    Ok(body)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use sqlx_db_tester::TestPg;
-
     use crate::requests::user::SignUpReq;
 
     #[tokio::test]
     async fn test_sign_up() -> anyhow::Result<()> {
-        let tdb = TestPg::new(
-            "postgres://postgres:123456@localhost:5432".to_string(),
-            std::path::Path::new("../migrations"),
-        );
+        let (tdb, _) = AppState::test_new().await?;
 
         let pool = tdb.get_pool().await;
 

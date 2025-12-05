@@ -1,5 +1,4 @@
 /target
 /.venv
 cli/fixtures
-test.http
 logs

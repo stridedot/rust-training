@@ -70,19 +70,15 @@ cargo generate tyr-rust-bootcamp/template
 
 ### 安装 pre-commit
 
-在使用 pip 之前，可使用 rye 管理 python
-```bash
-cd rust-training
-rye sync -v
-```
+在使用 pip 之前，可使用 uv 管理 python
 
 pre-commit 是一个代码检查工具，可以在提交代码前进行代码检查。
 
 ```bash
-pip install pre-commit
+uv pip install pre-commit
 ```
 
-安装成功后运行 `rye run pre-commit install` 即可。
+安装成功后运行 `uv run pre-commit install` 即可。
 
 ### 安装 Cargo deny
 
@@ -116,6 +112,14 @@ cargo nextest 是一个 Rust 增强测试工具。
 
 ```bash
 cargo install cargo-nextest --locked
+```
+
+### 安装 sqlx-cli
+
+sqlx-cli 是一个用于 SQL 数据库的命令行工具。
+
+```bash
+cargo install sqlx-cli --no-default-features --features 'rustls,postgres'
 ```
 
 ### 简化版安装

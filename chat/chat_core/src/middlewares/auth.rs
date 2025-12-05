@@ -10,7 +10,7 @@ use axum_extra::{
 };
 use serde::Deserialize;
 
-use crate::{middlewares::TokenVerify, utils::ApiResponse};
+use crate::{error::AppError, middlewares::TokenVerify, utils::ApiResponse};
 
 #[derive(Debug, Deserialize)]
 struct Params {
@@ -22,7 +22,6 @@ where
     T: TokenVerify + Clone + Send + Sync + 'static,
 {
     let (mut parts, body) = req.into_parts();
-    println!("1111,{:?}", parts);
 
     let token =
         match TypedHeader::<Authorization<Bearer>>::from_request_parts(&mut parts, &state).await {
@@ -32,15 +31,15 @@ where
                     match Query::<Params>::from_request_parts(&mut parts, &state).await {
                         Ok(Query(params)) => params.token,
                         Err(e) => {
-                            let msg = "failed to parse token from query";
-                            tracing::error!("{}, error: {}", msg, e);
+                            let msg = "failed to parse token, missing token from header or query";
+                            tracing::error!("{}", AppError::JwtError(e.into()));
                             return ApiResponse::<()>::error(StatusCode::UNAUTHORIZED, msg)
                                 .into_response();
                         }
                     }
                 } else {
-                    let msg = format!("Failed to parse token from header, error: {:?}", e);
-                    tracing::error!("{}", msg);
+                    let msg = "failed to parse token";
+                    tracing::error!("{}", AppError::JwtError(e.into()));
                     return ApiResponse::<()>::error(StatusCode::UNAUTHORIZED, msg).into_response();
                 }
             }
@@ -53,7 +52,7 @@ where
             req
         }
         Err(e) => {
-            let msg = format!("Failed to verify token, error: {:?}", e);
+            let msg = format!("failed to verify token, error: {:?}", e);
             tracing::error!("{}", msg);
             return ApiResponse::<()>::error(StatusCode::FORBIDDEN, msg).into_response();
         }

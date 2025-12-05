@@ -26,6 +26,7 @@ pub mod handlers;
 pub mod middlewares;
 pub mod repos;
 pub mod requests;
+pub mod responses;
 
 #[derive(Clone, Debug)]
 pub struct AppState {
@@ -81,7 +82,6 @@ impl TokenVerify for AppState {
 }
 
 pub async fn get_router(state: AppState) -> Result<Router, AppError> {
-    println!("11111");
     // 定义 message 路由
     let message = Router::new()
         .route("/{:chat_id}/message/list", routing::get(message_list))
@@ -100,8 +100,8 @@ pub async fn get_router(state: AppState) -> Result<Router, AppError> {
             state.clone(),
             auth::verify_token::<AppState>,
         ))
-        .route("/sign_up", routing::post(sign_up))
-        .route("/sign_in", routing::post(sign_in));
+        .route("/sign-up", routing::post(sign_up))
+        .route("/sign-in", routing::post(sign_in));
 
     let app = Router::new()
         .route("/", routing::get(|| async { "Hello, World!" }))

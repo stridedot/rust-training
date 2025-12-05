@@ -1,5 +1,5 @@
 # ===============================================
-# setup_tools.ps1 - 一键初始化 Rust + Python + Rye 开发环境
+# setup_tools.ps1 - 一键初始化 Rust + Python + uv 开发环境
 # only for Windows
 # ===============================================
 
@@ -7,66 +7,43 @@ Write-Host "=== Installing Rust tools ==="
 
 # 安装 Rust 常用工具
 cargo install cargo-generate
-cargo install --locked cargo-deny -and cargo deny init -and cargo deny check
+cargo install --locked cargo-deny
+cargo deny init
+cargo deny check
 cargo install typos-cli
-cargo install git-cliff -and git cliff --init
+cargo install git-cliff
+git cliff --init
 cargo install --locked cargo-nextest
 
 Write-Host "[OK] Rust tools installed successfully!"
 Write-Host ""
 
 # ===============================================
-Write-Host "=== Setting up Rye ==="
+$uvInstallDir = "D:\Devs\lang\rust\uv"
+$env:UV_INSTALL_DIR = $uvInstallDir
+$env:PATH = "$uvInstallDir;$env:PATH"
 
-# 设置 RYE_HOME
-$env:RYE_HOME = "D:\Rust\rye"
-
-# 检查 Rye 是否存在
-if (-not (Get-Command rye -ErrorAction SilentlyContinue)) {
-    Write-Host "Installing Rye..."
-    irm https://rye.astral.sh/get | iex
+# === 安装 uv（如未安装）===
+if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
+    Write-Host "Installing uv to $uvInstallDir..."
+    New-Item -ItemType Directory -Path $uvInstallDir -Force | Out-Null
+    irm https://astral.sh/uv/install.ps1 | iex
 }
 
-rye init
+# === 设置 pip 镜像（可选，加速国内安装）===
+$env:UV_PYTHON_PIP_INDEX_URL = "https://mirrors.aliyun.com/pypi/simple/"
 
-# 固定 Python 3.12
-rye pin cpython@3.12
+# === 创建带 pip 的虚拟环境 ===
+uv venv --python 3.12 --seed
 
-# 初始化并同步 Python 环境
-Write-Host "Running 'rye sync'..."
-try {
-    rye sync -v
-    Write-Host "[OK] Rye environment synchronized successfully!"
-}
-catch {
-    Write-Host "[Error] Rye sync failed: $($_.Exception.Message)"
-}
+# === 安装 pre-commit ===
+uv pip install pre-commit
+
+# === 安装 Git 钩子 ===
+uv run pre-commit install
 
 Write-Host ""
-
-# ===============================================
-Write-Host "=== Installing Python tools ==="
-
-# 使用国内 PyPI 镜像加速
-$env:PIP_INDEX_URL = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-
-try {
-    # 确保 pip 存在并是最新的
-    rye run python -m ensurepip --upgrade
-    rye run python -m pip install --upgrade pip setuptools wheel
-    Write-Host "[OK] pip installed/upgraded successfully!"
-
-    # 直接安装 pre-commit
-    rye run python -m pip install pre-commit
-    Write-Host "[OK] pre-commit installed successfully!"
-
-    # 安装 pre-commit 钩子
-    rye run pre-commit install
-    Write-Host "[OK] pre-commit hooks installed successfully!"
-}
-catch {
-    Write-Host "[Error] Failed to install pre-commit: $($_.Exception.Message)"
-}
+Write-Host "[OK] uv, virtual environment, and pre-commit are ready!"
 
 Write-Host ""
 Write-Host "[OK] All tools installed successfully!"

@@ -1,13 +1,17 @@
-use axum::{extract::State, response::IntoResponse};
+use axum::{Extension, Json, extract::State, response::IntoResponse};
 
-use crate::AppState;
-use chat_core::error::AppError;
+use crate::{AppState, requests::chat::CreateChatReq};
+use chat_core::{error::AppError, models::user::User};
 
 pub async fn chat_list(State(_): State<AppState>) -> Result<impl IntoResponse, AppError> {
     Ok(())
 }
 
-pub async fn chat_create(State(_): State<AppState>) -> Result<impl IntoResponse, AppError> {
+pub async fn chat_create(
+    State(_): State<AppState>,
+    Extension(_): Extension<User>,
+    Json(_): Json<CreateChatReq>,
+) -> Result<impl IntoResponse, AppError> {
     Ok(())
 }
 
