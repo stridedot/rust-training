@@ -1,25 +1,57 @@
-use axum::{Extension, Json, extract::State, response::IntoResponse};
+use axum::{
+    Extension, Json,
+    extract::{Path, State},
+    http::StatusCode,
+    response::IntoResponse,
+};
 
-use crate::{AppState, requests::chat::CreateChatReq};
-use chat_core::{error::AppError, models::user::User};
+use crate::{AppState, repos::chat::ChatRepo as _, requests::chat::CreateChatReq};
+use chat_core::{
+    error::AppError,
+    models::{chat::Chat, user::User},
+    utils::ApiResponse,
+};
 
-pub async fn chat_list(State(_): State<AppState>) -> Result<impl IntoResponse, AppError> {
-    Ok(())
+pub async fn chat_list(
+    State(state): State<AppState>,
+    Extension(user): Extension<User>,
+) -> Result<impl IntoResponse, AppError> {
+    let chats = Chat::get_all(user.workspace_id, &state.pg_pool).await?;
+    let body = ApiResponse::success(chats);
+
+    Ok(Json(body))
 }
 
 pub async fn chat_create(
+    State(state): State<AppState>,
+    Extension(user): Extension<User>,
+    Json(req): Json<CreateChatReq>,
+) -> Result<impl IntoResponse, AppError> {
+    let chat = Chat::create(&req, user.workspace_id, &state.pg_pool).await?;
+    let body = ApiResponse::success(chat);
+
+    Ok(Json(body))
+}
+
+pub async fn chat_detail(
+    State(state): State<AppState>,
+    Path(chat_id): Path<i64>,
+) -> Result<impl IntoResponse, AppError> {
+    let chat = Chat::find_by_id(chat_id, &state.pg_pool).await?;
+    match chat {
+        Some(chat) => Ok(Json(ApiResponse::success(chat))),
+        None => Ok(Json(ApiResponse::error(
+            StatusCode::NOT_FOUND,
+            "chat not found",
+        ))),
+    }
+}
+
+pub async fn chat_update(
     State(_): State<AppState>,
     Extension(_): Extension<User>,
     Json(_): Json<CreateChatReq>,
 ) -> Result<impl IntoResponse, AppError> {
-    Ok(())
-}
-
-pub async fn chat_detail(State(_): State<AppState>) -> Result<impl IntoResponse, AppError> {
-    Ok(())
-}
-
-pub async fn chat_update(State(_): State<AppState>) -> Result<impl IntoResponse, AppError> {
     Ok(())
 }
 

@@ -41,6 +41,11 @@ pub trait UserRepo: Sized {
     fn get_all(
         db: &PgPool,
     ) -> impl std::future::Future<Output = Result<Vec<ChatUser>, AppError>> + Send;
+
+    fn find_by_ids(
+        ids: &[i64],
+        db: &PgPool,
+    ) -> impl std::future::Future<Output = Result<Vec<ChatUser>, AppError>> + Send;
 }
 
 impl UserRepo for User {
@@ -121,6 +126,21 @@ impl UserRepo for User {
             from users
             "#,
         )
+        .fetch_all(db)
+        .await?;
+
+        Ok(users)
+    }
+
+    async fn find_by_ids(ids: &[i64], db: &PgPool) -> Result<Vec<ChatUser>, AppError> {
+        let users = sqlx::query_as(
+            r#"
+            select id, username, email, workspace_id, created_at
+            from users
+            where id = any($1)
+            "#,
+        )
+        .bind(ids)
         .fetch_all(db)
         .await?;
 

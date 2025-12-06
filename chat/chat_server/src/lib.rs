@@ -90,7 +90,7 @@ pub async fn get_router(state: AppState) -> Result<Router, AppError> {
     let api = Router::new()
         .route("/user/list", routing::get(user_list))
         .route("/chat/list", routing::get(chat_list))
-        .route("/chats/create", routing::post(chat_create))
+        .route("/chat/create", routing::post(chat_create))
         .route("/chat/update", routing::post(chat_update))
         .route("/chat/delete", routing::post(chat_delete))
         .route("/chat/{:chat_id}", routing::get(chat_detail))

@@ -31,3 +31,23 @@ Content-Type: application/json
 GET http://localhost:9090/api/user/list
 Cache-Control: no-cache
 Authorization: Bearer {{ token }}
+
+### test create chat
+POST http://localhost:9090/api/chat/create
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+    "name": "Noah1",
+    "user_ids": [1, 2]
+}
+
+### test get chat list
+GET http://localhost:9090/api/chat/list
+Cache-Control: no-cache
+Authorization: Bearer {{ token }}
+
+### test get chat detail
+GET http://localhost:9090/api/chat/7
+Cache-Control: no-cache
+Authorization: Bearer {{ token }}

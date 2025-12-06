@@ -9,6 +9,7 @@ Write-Host "=== Installing Rust tools ==="
 cargo install cargo-generate
 cargo install --locked cargo-deny
 cargo deny init
+cargo deny fetch
 cargo deny check
 cargo install typos-cli
 cargo install git-cliff

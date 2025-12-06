@@ -5,14 +5,26 @@ INSERT INTO workspace(name, owner_id)
 ('Boxies', 0);
 
 -- insert 5 users, all with hashed password '123456'
-INSERT INTO users(workspace_id, email, username, password)
-  VALUES (1, 'tchen@acme.org', 'Tyr Chen', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU'),
-(1, 'alice@acme.org', 'Alice Chen', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU'),
-(1, 'bob@acme.org', 'Bob Chen', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU'),
-(1, 'charlie@acme.org', 'Charlie Chen', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU'),
-(1, 'daisy@acme.org', 'Daisy Chen', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU');
+INSERT INTO users(username, email, password, workspace_id)
+  VALUES ('Tyr Chen', 'tchen@acme.org', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU', 1),
+('Alice Chen', 'alice@acme.org', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU', 1),
+('Bob Chen', 'bob@acme.org', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU', 1),
+('Charlie Chen', 'charlie@acme.org', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU', 1),
+('Daisy Chen', 'daisy@acme.org', '$argon2id$v=19$m=19456,t=2,p=1$MxGhY+ib/kplwBPLa7u2ug$c5h9u7Sc8Px8J5+qgNdOjSY7ZJO2QN4rugKpapGW4XU', 1),
+('Noah', 'Noah@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Liam', 'Liam@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Mason', 'Mason@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Jacob', 'Jacob@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('William', 'William@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Ethan', 'Ethan@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Michael', 'Michael@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Alexander', 'Alexander@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Emma', 'Emma@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Olivia', 'Olivia@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Sophia', 'Sophia@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1),
+('Isabella', 'Isabella@gmail.com', '$argon2id$v=19$m=19456,t=2,p=1$YuupYiBUSY6Ge+3BiDlF5A$lecghI2716CgzM2aixxKx9wibZWDasOvDcHS3BE+M5I', 1);
 
--- insert 4 chats
+-- insert 4 chat
 -- insert public/private channel
 INSERT INTO chat(workspace_id, name, type, user_ids)
   VALUES (1, 'general', 'public_channel', '{1,2,3,4,5}'),

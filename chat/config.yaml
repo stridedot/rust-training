@@ -3,7 +3,7 @@ server:
   http_port: 9090
   sse_port: 9091
   pg_url: "postgres://postgres:123456@localhost:5432/chat"
-  file_dir: "./files"
+  file_dir: "chat/files"
 auth:
   sign_key: |
     -----BEGIN PRIVATE KEY-----

@@ -11,7 +11,6 @@ pub struct User {
     #[serde(skip)]
     pub password: String,
     #[sqlx(default)]
-    #[serde(skip)]
     pub workspace_id: i64,
     pub created_at: DateTime<Utc>,
 }
