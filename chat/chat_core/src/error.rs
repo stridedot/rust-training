@@ -26,12 +26,18 @@ pub enum AppError {
     #[error("Password error, {0}")]
     PasswordError(#[from] argon2::password_hash::Error),
 
+    #[error("Forbidden, {0}")]
+    Forbidden(String),
+
     #[error("Not found, {0}")]
     NotFound(String),
 
     // 客户端错误 400
     #[error("Invalid request, {0}")]
     InvalidRequest(String),
+
+    #[error("Invalid file, {0}")]
+    InvalidFile(String),
 }
 
 impl IntoResponse for AppError {
@@ -43,7 +49,9 @@ impl IntoResponse for AppError {
             Self::JwtError(_) => StatusCode::FORBIDDEN,
             Self::PasswordError(_) => StatusCode::FORBIDDEN,
             Self::NotFound(_) => StatusCode::NOT_FOUND,
+            Self::Forbidden(_) => StatusCode::FORBIDDEN,
             Self::InvalidRequest(_) => StatusCode::BAD_REQUEST,
+            Self::InvalidFile(_) => StatusCode::BAD_REQUEST,
         };
 
         let json: ApiResponse<()> = ApiResponse::error(status, self.to_string());

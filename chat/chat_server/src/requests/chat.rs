@@ -16,3 +16,8 @@ pub struct UpdateChatReq {
     #[serde(default)]
     pub is_public: bool,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct DeleteChatReq {
+    pub id: i64,
+}

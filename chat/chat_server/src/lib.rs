@@ -8,7 +8,7 @@ use crate::{
     handlers::{
         auth::{sign_in, sign_up},
         chat::{chat_create, chat_delete, chat_detail, chat_list, chat_update},
-        file::file_upload,
+        file::{file_download, file_upload},
         message::{message_list, message_send},
         user::user_list,
     },
@@ -96,6 +96,10 @@ pub async fn get_router(state: AppState) -> Result<Router, AppError> {
         .route("/chat/{:chat_id}", routing::get(chat_detail))
         .route("/upload", routing::post(file_upload))
         .nest("/chat", message)
+        .route(
+            "/download/{:workspace_id}/{*path}",
+            routing::get(file_download),
+        )
         .layer(from_fn_with_state(
             state.clone(),
             auth::verify_token::<AppState>,

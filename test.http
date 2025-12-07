@@ -42,6 +42,20 @@ Authorization: Bearer {{ token }}
     "user_ids": [1, 2]
 }
 
+### test update chat
+POST http://localhost:9090/api/chat/update
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+    "id": 7,
+    "name": "IT",
+    "user_ids": [1, 2],
+    "is_public": false
+}
+
+
+
 ### test get chat list
 GET http://localhost:9090/api/chat/list
 Cache-Control: no-cache
@@ -51,3 +65,34 @@ Authorization: Bearer {{ token }}
 GET http://localhost:9090/api/chat/7
 Cache-Control: no-cache
 Authorization: Bearer {{ token }}
+
+### test delete chat
+POST http://localhost:9090/api/chat/delete
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+    "id": 7
+}
+
+### test file upload
+POST http://localhost:9090/api/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="file"; filename="11.jpg"
+Content-Type: application/octet-stream
+
+< C:\Users\Trist\Pictures\表情\11.jpg
+--MyBoundary
+Content-Disposition: form-data; name="hello.txt"
+Content-Type: text/plain
+
+hello, world!
+--MyBoundary--
+
+### test file download
+GET http://localhost:9090/api/download/1/779/20c/5872d746712af6e43d2397aa8795df04a6.jpg
+Cache-Control: no-cache
+Authorization: Bearer {{token}}

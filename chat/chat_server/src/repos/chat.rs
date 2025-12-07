@@ -18,6 +18,7 @@ pub trait ChatRepo: Sized {
 
     fn update(
         req: &UpdateChatReq,
+        user_id: i64,
         pg: &PgPool,
     ) -> impl std::future::Future<Output = Result<Self, AppError>> + Send;
 
@@ -32,7 +33,8 @@ pub trait ChatRepo: Sized {
     ) -> impl std::future::Future<Output = Result<Vec<Self>, AppError>> + Send;
 
     fn delete(
-        id: i64,
+        chat_id: i64,
+        user_id: i64,
         pg: &PgPool,
     ) -> impl std::future::Future<Output = Result<(), AppError>> + Send;
 
@@ -79,10 +81,16 @@ impl ChatRepo for Chat {
         Ok(chat)
     }
 
-    async fn update(req: &UpdateChatReq, pg: &PgPool) -> Result<Self, AppError> {
+    async fn update(req: &UpdateChatReq, user_id: i64, pg: &PgPool) -> Result<Self, AppError> {
         let chat = Self::find_by_id(req.id, pg).await?;
         if chat.is_none() {
             return Err(AppError::NotFound("chat not exists".to_string()));
+        }
+
+        if !Self::is_chat_member(req.id, user_id, pg).await? {
+            return Err(AppError::Forbidden(
+                "user has no permission to update chat".to_string(),
+            ));
         }
 
         if req.user_ids.is_empty() {
@@ -116,6 +124,7 @@ impl ChatRepo for Chat {
         .bind(&req.name)
         .bind(chat_type)
         .bind(&req.user_ids)
+        .bind(req.id)
         .fetch_one(pg)
         .await?;
 
@@ -152,18 +161,23 @@ impl ChatRepo for Chat {
         Ok(chats)
     }
 
-    async fn delete(id: i64, pg: &PgPool) -> Result<(), AppError> {
-        sqlx::query(
+    async fn delete(chat_id: i64, user_id: i64, pg: &PgPool) -> Result<(), AppError> {
+        let result = sqlx::query(
             r#"
             delete from chat
             where id = $1
+            and $2 = any(user_ids)
             "#,
         )
-        .bind(id)
+        .bind(chat_id)
+        .bind(user_id)
         .execute(pg)
         .await?;
 
-        Ok(())
+        match result.rows_affected() {
+            0 => Err(AppError::NotFound("chat not exists".to_string())),
+            _ => Ok(()),
+        }
     }
 
     async fn is_chat_member(chat_id: i64, user_id: i64, pg: &PgPool) -> Result<bool, AppError> {
@@ -225,6 +239,37 @@ mod tests {
 
         assert_eq!(chat.name, Some("test chat2".to_string()));
         assert_eq!(chat.r#type, ChatType::PrivateChannel);
+
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn test_update_chat() -> Result<(), AppError> {
+        let (tdb, _) = AppState::test_new().await?;
+        let db = tdb.get_pool().await;
+
+        let req = CreateChatReq {
+            name: Some("test chat".to_string()),
+            user_ids: vec![1, 2],
+            is_public: false,
+        };
+
+        let chat = Chat::create(&req, 1, &db).await?;
+
+        let req = UpdateChatReq {
+            id: chat.id,
+            name: Some("IT".to_string()),
+            user_ids: vec![1, 2],
+            is_public: false,
+        };
+
+        let chat = Chat::update(&req, 1, &db).await?;
+
+        assert_eq!(chat.name, Some("IT".to_string()));
+        assert_eq!(chat.r#type, ChatType::Single);
+
+        let chat = Chat::update(&req, 3, &db).await;
+        assert!(chat.is_err());
 
         Ok(())
     }
