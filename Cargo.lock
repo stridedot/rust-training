@@ -1829,6 +1829,7 @@ dependencies = [
  "axum",
  "chat_core",
  "dashmap",
+ "futures",
  "futures-util",
  "jwt-simple",
  "serde",

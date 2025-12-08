@@ -10,6 +10,7 @@ chat_core = { workspace = true }
 anyhow = { workspace = true }
 axum = { workspace = true }
 dashmap = { workspace = true }
+futures = "0.3.31"
 futures-util = "0.3.31"
 jwt-simple = { workspace = true }
 serde = { workspace = true }

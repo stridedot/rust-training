@@ -6,27 +6,35 @@ use chat_core::{
     models::user::User,
     utils::jwt::DecodingKey,
 };
+use dashmap::DashMap;
 use std::{ops::Deref, sync::Arc};
+use tokio::sync::broadcast;
 
 use crate::{config::AppConfig, sse::sse_handler};
 
 pub mod config;
+pub mod notify;
 pub mod sse;
 
 #[derive(Clone)]
 pub struct AppState(Arc<AppStateInner>);
 
 pub struct AppStateInner {
-    #[allow(dead_code)]
     config: AppConfig,
+    users: Arc<DashMap<i64, broadcast::Sender<Arc<notify::AppEvent>>>>,
     verify_key: DecodingKey,
 }
 
 impl AppState {
     pub async fn try_new(config: AppConfig) -> Result<Self> {
+        let users = Arc::new(DashMap::new());
         let verify_key = DecodingKey::load(&config.auth.verify_key)?;
 
-        Ok(Self(Arc::new(AppStateInner { config, verify_key })))
+        Ok(Self(Arc::new(AppStateInner {
+            config,
+            users,
+            verify_key,
+        })))
     }
 }
 
@@ -47,6 +55,8 @@ impl Deref for AppState {
 }
 
 pub async fn get_router(state: AppState) -> Result<Router> {
+    notify::setup_pg_listener(state.clone()).await?;
+
     let router = Router::new()
         .route("/events", routing::get(sse_handler))
         .layer(from_fn_with_state(
