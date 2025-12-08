@@ -2,11 +2,11 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct MessageListRequest {
-    pub last_id: Option<isize>,
+    pub last_id: Option<i64>,
     pub limit: Option<isize>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct MessageSendRequest {
     pub content: String,
     #[serde(default)]

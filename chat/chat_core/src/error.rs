@@ -54,7 +54,7 @@ impl IntoResponse for AppError {
             Self::InvalidFile(_) => StatusCode::BAD_REQUEST,
         };
 
-        let json: ApiResponse<()> = ApiResponse::error(status, self.to_string());
+        let json = ApiResponse::<()>::error(status, self.to_string());
         (StatusCode::OK, Json(json)).into_response()
     }
 }

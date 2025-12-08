@@ -17,6 +17,7 @@ argon2 = "0.5.3"
 axum = { workspace = true }
 hex = "0.4.3"
 jwt-simple = { workspace = true }
+mime_guess = "2.0.5"
 opentelemetry = { workspace = true }
 opentelemetry-otlp = { workspace = true }
 opentelemetry_sdk = { workspace = true }
@@ -39,4 +40,3 @@ utoipa-swagger-ui = { workspace = true }
 utoipa-redoc = { workspace = true }
 utoipa-rapidoc = { workspace = true }
 tokio-util = { workspace = true }
-mime_guess = "2.0.5"

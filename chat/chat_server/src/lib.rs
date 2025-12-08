@@ -16,7 +16,7 @@ use crate::{
 
 use chat_core::{
     error::AppError,
-    middlewares::{TokenVerify, auth},
+    middlewares::{TokenVerify, auth, set_layer},
     models::user::User,
     utils::jwt::{DecodingKey, EncodingKey},
 };
@@ -82,7 +82,6 @@ impl TokenVerify for AppState {
 }
 
 pub async fn get_router(state: AppState) -> Result<Router, AppError> {
-    // 定义 message 路由
     let message = Router::new()
         .route("/{:chat_id}/message/list", routing::get(message_list))
         .route("/{:chat_id}/message/send", routing::post(message_send));
@@ -97,7 +96,7 @@ pub async fn get_router(state: AppState) -> Result<Router, AppError> {
         .route("/upload", routing::post(file_upload))
         .nest("/chat", message)
         .route(
-            "/download/{:workspace_id}/{*path}",
+            "/chat/files/{:workspace_id}/{*path}",
             routing::get(file_download),
         )
         .layer(from_fn_with_state(
@@ -112,7 +111,7 @@ pub async fn get_router(state: AppState) -> Result<Router, AppError> {
         .nest("/api", api)
         .with_state(state);
 
-    Ok(app)
+    Ok(set_layer(app))
 }
 
 #[cfg(feature = "test-util")]

@@ -26,16 +26,19 @@ Content-Type: application/json
 ###
 
 @token = {{signin.response.body.data.token}}
+@request_id = {{signin.response.headers.x-request-id}}
 
 ### test get user list
 GET http://localhost:9090/api/user/list
 Cache-Control: no-cache
 Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}
 
 ### test create chat
 POST http://localhost:9090/api/chat/create
 Content-Type: application/json
 Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}
 
 {
     "name": "Noah1",
@@ -46,30 +49,32 @@ Authorization: Bearer {{ token }}
 POST http://localhost:9090/api/chat/update
 Content-Type: application/json
 Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}
 
 {
-    "id": 7,
+    "id": 1,
     "name": "IT",
     "user_ids": [1, 2],
     "is_public": false
 }
 
-
-
 ### test get chat list
 GET http://localhost:9090/api/chat/list
 Cache-Control: no-cache
 Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}
 
 ### test get chat detail
-GET http://localhost:9090/api/chat/7
+GET http://localhost:9090/api/chat/1
 Cache-Control: no-cache
 Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}
 
 ### test delete chat
 POST http://localhost:9090/api/chat/delete
 Content-Type: application/json
 Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}
 
 {
     "id": 7
@@ -78,13 +83,15 @@ Authorization: Bearer {{ token }}
 ### test file upload
 POST http://localhost:9090/api/upload
 Authorization: Bearer {{token}}
+x-request-id: {{request_id}}
 Content-Type: multipart/form-data; boundary=MyBoundary
 
 --MyBoundary
-Content-Disposition: form-data; name="file"; filename="11.jpg"
+Content-Disposition: form-data; name="file"; filename="GvKFaZhW4AAiVbM.jpg"
 Content-Type: application/octet-stream
 
-< C:\Users\Trist\Pictures\表情\11.jpg
+# < C:\Users\Trist\Pictures\表情\11.jpg
+ < C:\Users\strid\Pictures\照片\GvKFaZhW4AAiVbM.jpg
 --MyBoundary
 Content-Disposition: form-data; name="hello.txt"
 Content-Type: text/plain
@@ -93,6 +100,23 @@ hello, world!
 --MyBoundary--
 
 ### test file download
-GET http://localhost:9090/api/download/1/779/20c/5872d746712af6e43d2397aa8795df04a6.jpg
+GET http://localhost:9090/api/chat/files/1/7e1/139/697d00b564f9522765ed41f6b207b12de5.jpg
 Cache-Control: no-cache
 Authorization: Bearer {{token}}
+x-request-id: {{request_id}}
+
+### test send message
+POST http://localhost:9090/api/chat/1/message/send
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}
+
+{
+    "content": "你要干什么"
+}
+
+### test get message list
+GET http://localhost:9090/api/chat/1/message/list?last_id=3&limit=2
+Cache-Control: no-cache
+Authorization: Bearer {{ token }}
+x-request-id: {{request_id}}

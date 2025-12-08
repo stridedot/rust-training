@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::{path::Path, str::FromStr};
 
 use chat_core::error::AppError;
 use sha1::{Digest as _, Sha1};
@@ -38,6 +38,44 @@ impl ChatFile {
     }
 
     pub fn url(&self) -> String {
-        format!("chat/files/{}", self.hash_to_path())
+        format!("/chat/files/{}", self.hash_to_path())
+    }
+}
+
+// convert /chat/files/1/779/20c/5872d746712af6e43d2397aa8795df04a6.jpg to ChatFile
+impl FromStr for ChatFile {
+    type Err = AppError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let Some(s) = s.strip_prefix("/chat/files/") else {
+            return Err(AppError::InvalidFile(format!("invalid file path: {}", s)));
+        };
+
+        let parts = s.split('/').collect::<Vec<_>>();
+        if parts.len() != 4 {
+            return Err(AppError::InvalidFile(format!("invalid file path: {}", s)));
+        }
+
+        let Ok(workspace_id) = parts[0].parse::<i64>() else {
+            return Err(AppError::InvalidFile(format!(
+                "invalid workspace_id: {}",
+                parts[0]
+            )));
+        };
+
+        let Some((part3, ext)) = parts[3].split_once('.') else {
+            return Err(AppError::InvalidFile(format!(
+                "invalid filename or ext: {}",
+                parts[3]
+            )));
+        };
+
+        let hash = format!("{}{}{}", parts[1], parts[2], part3);
+
+        Ok(Self {
+            workspace_id,
+            ext: ext.to_string(),
+            hash: hash.to_string(),
+        })
     }
 }
