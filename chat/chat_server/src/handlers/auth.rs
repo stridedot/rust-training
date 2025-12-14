@@ -8,6 +8,17 @@ use crate::{
 };
 use chat_core::{error::AppError, models::user::User, utils::ApiResponse};
 
+#[utoipa::path(
+    post,
+    path = "/api/sign-up",
+    request_body = SignUpReq,
+    responses(
+        (status = 200, description = "User signed up successfully", body = AuthOutput),
+        (status = 500, description = "sqlx error"),
+    ),
+    tag = "auth",
+    description = "Sign up a new user",
+)]
 pub async fn sign_up(
     State(state): State<AppState>,
     Json(req): Json<SignUpReq>,
@@ -18,6 +29,18 @@ pub async fn sign_up(
     Ok(ApiResponse::success(AuthOutput { token }))
 }
 
+#[utoipa::path(
+    post,
+    path = "/api/sign-in",
+    request_body = SignInReq,
+    responses(
+        (status = 200, description = "User signed in successfully", body = AuthOutput),
+        (status = 403, description = "User not found or password incorrect"),
+        (status = 500, description = "sqlx error"),
+    ),
+    tag = "auth",
+    description = "Sign in a user",
+)]
 pub async fn sign_in(
     State(state): State<AppState>,
     Json(req): Json<SignInReq>,

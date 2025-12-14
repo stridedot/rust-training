@@ -112,7 +112,8 @@ Authorization: Bearer {{ token }}
 x-request-id: {{request_id}}
 
 {
-    "content": "你要干什么"
+    "content": "我是刘秀",
+    "files": ["/chat/files/1/7e1/139/697d00b564f9522765ed41f6b207b12de5.jpg"]
 }
 
 ### test get message list

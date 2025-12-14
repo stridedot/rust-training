@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
+use utoipa::ToSchema;
 
 use crate::models::ChatType;
 
-#[derive(Clone, Debug, Deserialize, FromRow, Serialize)]
+#[derive(Clone, Debug, Deserialize, FromRow, Serialize, ToSchema)]
 pub struct Chat {
     pub id: i64,
     pub name: Option<String>,

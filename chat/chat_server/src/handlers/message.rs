@@ -20,6 +20,22 @@ use chat_core::{
 
 use axum::extract::Path;
 
+#[utoipa::path(
+    get,
+    path = "/api/chat/{chat_id}/message/list",
+    security(
+        ("token" = []),
+    ),
+    params(
+        ("chat_id" = i64, Path, description = "Chat ID"),
+    ),
+    responses(
+        (status = 200, description = "Message list found successfully", body = Vec<Message>),
+        (status = 403, description = "User is not chat member"),
+        (status = 500, description = "sqlx error"),
+    ),
+    tag = "chat",
+)]
 pub async fn message_list(
     State(state): State<AppState>,
     Extension(user): Extension<User>,
@@ -38,6 +54,24 @@ pub async fn message_list(
     Ok(ApiResponse::success(msgs))
 }
 
+#[utoipa::path(
+    post,
+    path = "/api/chat/{chat_id}/message/send",
+    security(
+        ("token" = []),
+    ),
+    params(
+        ("chat_id" = i64, Path, description = "Chat ID"),
+    ),
+    responses(
+        (status = 200, description = "Message sent successfully", body = Message),
+        (status = 400, description = "Invalid request"),
+        (status = 403, description = "User is not chat member"),
+        (status = 404, description = "File not found"),
+        (status = 500, description = "sqlx error"),
+    ),
+    tag = "chat",
+)]
 pub async fn message_send(
     State(state): State<AppState>,
     Extension(user): Extension<User>,

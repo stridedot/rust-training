@@ -12,6 +12,7 @@ use crate::{
         message::{message_list, message_send},
         user::user_list,
     },
+    openapi::OpenApiRouter,
 };
 
 use chat_core::{
@@ -24,6 +25,7 @@ use chat_core::{
 pub mod config;
 pub mod handlers;
 pub mod middlewares;
+pub mod openapi;
 pub mod repos;
 pub mod requests;
 pub mod responses;
@@ -107,6 +109,7 @@ pub async fn get_router(state: AppState) -> Result<Router, AppError> {
         .route("/sign-in", routing::post(sign_in));
 
     let app = Router::new()
+        .openapi()
         .route("/", routing::get(|| async { "Hello, World!" }))
         .nest("/api", api)
         .with_state(state);

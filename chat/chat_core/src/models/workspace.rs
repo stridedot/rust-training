@@ -1,8 +1,9 @@
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 use sqlx::prelude::FromRow;
+use utoipa::ToSchema;
 
-#[derive(Debug, Deserialize, FromRow)]
+#[derive(Debug, Deserialize, FromRow, ToSchema)]
 pub struct Workspace {
     pub id: i64,
     pub name: String,

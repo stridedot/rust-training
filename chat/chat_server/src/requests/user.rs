@@ -1,6 +1,7 @@
 use serde::Deserialize;
+use utoipa::ToSchema;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct SignUpReq {
     pub username: String,
     pub email: String,
@@ -8,7 +9,7 @@ pub struct SignUpReq {
     pub workspace: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct SignInReq {
     pub email: String,
     pub password: String,

@@ -10,7 +10,7 @@
 <body>
     <h1>Server Sent Events</h1>
     <script>
-        let token = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjAxNzA4MzcsImV4cCI6MTc2MDc3NTYzNywibmJmIjoxNzYwMTcwODM3LCJpc3MiOiJjaGF0X3NlcnZlciIsImF1ZCI6ImNoYXRfd2ViIiwiaWQiOjEsIndvcmtzcGFjZV9pZCI6MSwidXNlcm5hbWUiOiJOb2FoIiwiZW1haWwiOiJOb2FoQGdtYWlsLmNvbSIsImNyZWF0ZWRfYXQiOiIyMDI1LTA5LTI2VDA3OjMxOjIzLjc4NDY1NVoifQ.Oezeek8ReSmaipnXknXTrhYcIPPiFOY5Ny5GzpwR9-G7e29dJZQqvhHEbTF8U5yQiheGPNFApKHX9dD6p91dBA';
+        let token = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjUyNDUwNzEsImV4cCI6MTc2NTg0OTg3MSwibmJmIjoxNzY1MjQ1MDcxLCJpc3MiOiJjaGF0X3NlcnZlciIsImF1ZCI6ImNoYXRfd2ViIiwiaWQiOjEsInVzZXJuYW1lIjoiTm9haCIsImVtYWlsIjoiTm9haEBnbWFpbC5jb20iLCJ3b3Jrc3BhY2VfaWQiOjEsImNyZWF0ZWRfYXQiOiIyMDI1LTEyLTA1VDA5OjA1OjM2LjQ2NDEwM1oifQ.suDgHbCwHTag9QyJnhjAfQpnV5skYFYW7XqiB-jUU-4KZzCyLuCBJ7txYiFWNaXhHqlzqiqWK-da6YLWrcmNDw';
         const source = new EventSource('/events?token=' + token);
         source.onmessage = (event) => {
             console.log('Message:', event.data);
