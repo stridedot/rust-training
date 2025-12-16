@@ -3,4 +3,9 @@
         "test-util"
     ],
     "rust-analyzer.cargo.noDefaultFeatures": false,
+    "protoc": {
+        "options": [
+            "--proto_path=./crm/protos",
+        ]
+    }
 }

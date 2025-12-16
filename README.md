@@ -24,6 +24,7 @@
 - 简单 nginx 服务器
 - sqlx 的简单使用
 - 聊天服务器
+- crm 微服务
 
 ### chat 聊天服务
 
@@ -126,3 +127,8 @@ cargo install sqlx-cli --no-default-features --features 'rustls,postgres'
 
 ### 简化版安装
 运行 `setup_tools.ps1` 脚本即可安装所有工具。
+
+## 其他工具安装
+
+### Protoc
+Manually install protoc from [here](https://github.com/protocolbuffers/protobuf/releases).
