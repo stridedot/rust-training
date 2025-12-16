@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package crm;
+
+import "crm/message.proto";
+
+// CRMService is the service that provides CRM functionalities.
+service CRMService {
+  // Welcome is the RPC method that welcomes a customer.
+  rpc Welcome(WelcomeRequest) returns (WelcomeResponse);
+  // Recall is the RPC method that recalls a customer.
+  rpc Recall(RecallRequest) returns (RecallResponse);
+  // Remind is the RPC method that reminds a customer.
+  rpc Remind(RemindRequest) returns (RemindResponse);
+}

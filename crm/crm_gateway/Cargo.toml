@@ -1,0 +1,32 @@
+[package]
+name = "crm_gateway"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[package.metadata.rustfmt]
+exclude = ["src/pb/*.rs"]
+
+[[bin]]
+name = "server"
+path = "src/server.rs"
+
+[[bin]]
+name = "client"
+path = "src/client.rs"
+
+
+[dependencies]
+anyhow = { workspace = true }
+prost = { workspace = true }
+prost-types = { workspace = true }
+serde = { workspace = true }
+serde_yaml = { workspace = true }
+tokio = { workspace = true }
+tonic = { workspace = true }
+tonic-prost = { workspace = true }
+uuid = { workspace = true }
+
+[build-dependencies]
+anyhow = { workspace = true }
+tonic-prost-build = { workspace = true }
