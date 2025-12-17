@@ -7,7 +7,6 @@ license = "MIT"
 [features]
 default = []
 test-util = ["http-body-util", "sqlx-db-tester"]
-sqlx-db-tester = ["dep:sqlx-db-tester"]
 
 [dependencies]
 chat_core = { workspace = true }
@@ -40,3 +39,6 @@ utoipa-swagger-ui = { workspace = true }
 utoipa-redoc = { workspace = true }
 utoipa-rapidoc = { workspace = true }
 tokio-util = { workspace = true }
+
+[dev-dependencies]
+chat_server = { workspace = true, features = ["test-util"] }

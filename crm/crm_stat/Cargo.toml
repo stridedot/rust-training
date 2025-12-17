@@ -5,3 +5,19 @@ edition = "2024"
 license = "MIT"
 
 [dependencies]
+anyhow = { workspace = true }
+chrono = { workspace = true }
+fake = { "version" = "4.4.0", "features" = ["derive", "chrono"] }
+prost = { workspace = true }
+prost-types = { workspace = true }
+serde = { workspace = true }
+serde_yaml = { workspace = true }
+sqlx = { workspace = true }
+tokio = { workspace = true }
+tonic = { workspace = true }
+tonic-prost = { workspace = true }
+uuid = { workspace = true }
+
+[build-dependencies]
+anyhow = { workspace = true }
+tonic-prost-build = { workspace = true }

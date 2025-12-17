@@ -1,6 +1,6 @@
 {
     "rust-analyzer.cargo.features": [
-        "test-util"
+        // "test-util"
     ],
     "rust-analyzer.cargo.noDefaultFeatures": false,
     "protoc": {
