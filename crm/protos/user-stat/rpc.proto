@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package user_stat;
+
+import "user-stat/message.proto";
+
+// UserStatService is the service for querying user statistics.
+service UserStatService {
+    // Query queries user statistics.
+  rpc Query(QueryRequest) returns (stream User);
+    // RawQuery queries user statistics with raw query string.
+  rpc RawQuery(RawQueryRequest) returns (stream User);
+}

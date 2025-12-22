@@ -22,6 +22,7 @@ notify_server = { path = "chat/notify_server" }
 
 crm_metadata = { path = "crm/crm_metadata" }
 crm_send = { path = "crm/crm_send" }
+crm_stat = { path = "crm/crm_stat" }
 
 anyhow = "1.0.100"
 axum = { version = "0.8.6", features = [
@@ -36,6 +37,7 @@ chrono = { version = "0.4.42", features = ["serde"] }
 clap = { version = "4.5.51", features = ["derive"] }
 csv = "1.4.0"
 dashmap = "6.1.0"
+futures = "0.3.31"
 jwt-simple = { version = "0.12.13", default-features = false, features = [
     "pure-rust",
 ] }
