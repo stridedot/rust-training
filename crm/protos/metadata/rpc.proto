@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package metadata;
+
+import "metadata/message.proto";
+
+// MetadataService is the service that provides metadata for contents.
+service MetadataService {
+  // Materialize materializes the metadata of a content.
+  rpc Materialize(stream MaterializeRequest) returns (stream Content);
+}
