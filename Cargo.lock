@@ -684,6 +684,27 @@ dependencies = [
 [[package]]
 name = "crm_send"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "fake",
+ "futures",
+ "prost",
+ "prost-types",
+ "rand 0.8.5",
+ "serde",
+ "serde_yaml",
+ "sqlx",
+ "sqlx-db-tester",
+ "tokio",
+ "tokio-stream",
+ "tonic",
+ "tonic-prost",
+ "tonic-prost-build",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+]
 
 [[package]]
 name = "crm_stat"
