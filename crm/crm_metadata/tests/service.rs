@@ -8,7 +8,7 @@ use futures::StreamExt as _;
 use std::net::SocketAddr;
 use tonic::transport::Server;
 
-const PORT_BASE: u32 = 6001;
+const PORT_BASE: u32 = 60001;
 
 #[tokio::test]
 async fn test_materialize_should_work() -> Result<()> {

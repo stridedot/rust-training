@@ -12,7 +12,7 @@ use prost_types::Timestamp;
 use sqlx_db_tester::TestPg;
 use tonic::transport::Server;
 
-const PORT_BASE: u32 = 6002;
+const PORT_BASE: u32 = 60002;
 
 #[tokio::test]
 async fn test_raw_query_should_work() -> Result<()> {
