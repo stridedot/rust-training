@@ -39,7 +39,7 @@ impl MetadataService for CrmMetadata {
 }
 
 impl CrmMetadata {
-    pub async fn try_new(config: AppConfig) -> Self {
+    pub async fn new(config: AppConfig) -> Self {
         Self { config }
     }
 

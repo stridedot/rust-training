@@ -32,6 +32,12 @@ impl From<InAppMessage> for SendRequest {
     }
 }
 
+impl From<InAppMessage> for Msg {
+    fn from(msg: InAppMessage) -> Self {
+        Self::InApp(msg)
+    }
+}
+
 impl InAppMessage {
     pub fn fake() -> Self {
         use fake::faker::lorem::en::Sentence;

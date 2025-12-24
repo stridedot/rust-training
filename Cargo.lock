@@ -663,6 +663,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "chrono",
+ "crm_metadata",
  "fake",
  "futures",
  "prost",
@@ -687,6 +688,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "chrono",
+ "crm_send",
  "fake",
  "futures",
  "prost",
@@ -695,7 +697,6 @@ dependencies = [
  "serde",
  "serde_yaml",
  "sqlx",
- "sqlx-db-tester",
  "tokio",
  "tokio-stream",
  "tonic",

@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
+[features]
+default = []
+test-util = []
+
 [dependencies]
 anyhow = { workspace = true }
 chrono = { workspace = true }
@@ -15,7 +19,6 @@ rand = { workspace = true }
 serde = { workspace = true }
 serde_yaml = { workspace = true }
 sqlx = { workspace = true }
-sqlx-db-tester = { version = "0.7.1", optional = true }
 tokio = { workspace = true }
 tokio-stream = { workspace = true }
 tonic = { workspace = true }
@@ -27,3 +30,6 @@ uuid = { workspace = true }
 [build-dependencies]
 anyhow = { workspace = true }
 tonic-prost-build = { workspace = true }
+
+[dev-dependencies]
+crm_send = { workspace = true, features = ["test-util"] }

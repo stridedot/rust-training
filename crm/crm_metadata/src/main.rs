@@ -13,7 +13,7 @@ async fn main() -> anyhow::Result<()> {
     let config = AppConfig::load()?;
     let port = config.server.metadata_port;
 
-    let crm_metadata = CrmMetadata::try_new(config).await;
+    let crm_metadata = CrmMetadata::new(config).await;
     let svc = crm_metadata.into_server();
 
     let addr = format!("[::1]:{}", port).parse()?;

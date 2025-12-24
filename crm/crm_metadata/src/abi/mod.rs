@@ -101,7 +101,7 @@ mod tests {
     #[tokio::test]
     async fn test_materialize_should_work() -> anyhow::Result<()> {
         let config = AppConfig::load()?;
-        let service = CrmMetadata::try_new(config).await;
+        let service = CrmMetadata::new(config).await;
 
         let stream = tokio_stream::iter(vec![
             Ok(MaterializeRequest { id: 1 }),

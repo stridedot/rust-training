@@ -31,6 +31,12 @@ impl From<SmsMessage> for SendRequest {
     }
 }
 
+impl From<SmsMessage> for Msg {
+    fn from(msg: SmsMessage) -> Self {
+        Self::Sms(msg)
+    }
+}
+
 impl SmsMessage {
     pub fn fake() -> Self {
         use fake::Fake as _;

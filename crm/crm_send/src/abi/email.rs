@@ -33,6 +33,12 @@ impl From<EmailMessage> for SendRequest {
     }
 }
 
+impl From<EmailMessage> for Msg {
+    fn from(msg: EmailMessage) -> Self {
+        Self::Email(msg)
+    }
+}
+
 impl EmailMessage {
     pub fn fake() -> Self {
         use fake::{Fake, faker::internet::en::SafeEmail};
