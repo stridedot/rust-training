@@ -724,6 +724,7 @@ dependencies = [
  "sqlx",
  "sqlx-db-tester",
  "tokio",
+ "tokio-stream",
  "tonic",
  "tonic-prost",
  "tonic-prost-build",

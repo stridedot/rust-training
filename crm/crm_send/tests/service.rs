@@ -10,13 +10,11 @@ use crm_send::{
     },
 };
 use futures::StreamExt as _;
-use tonic::transport::Server;
-
-const PORT_BASE: u32 = 6003;
+use tonic::transport::{Server, server::TcpIncoming};
 
 #[tokio::test]
 async fn test_send_should_work() -> Result<()> {
-    let addr = start_server(PORT_BASE).await?;
+    let addr = start_server().await?;
 
     let stream = tokio_stream::iter(vec![
         SendRequest {
@@ -44,16 +42,19 @@ async fn test_send_should_work() -> Result<()> {
     Ok(())
 }
 
-async fn start_server(port: u32) -> Result<SocketAddr> {
-    let addr = format!("127.0.0.1:{}", port).parse()?;
+async fn start_server() -> Result<SocketAddr> {
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await?;
+    let addr = listener.local_addr()?;
 
     let config = AppConfig::load()?;
     let svc = Notification::new(config).await.into_server();
 
+    let incoming = TcpIncoming::from(listener);
+
     tokio::spawn(async move {
         Server::builder()
             .add_service(svc)
-            .serve(addr)
+            .serve_with_incoming(incoming)
             .await
             .unwrap();
     });

@@ -10,13 +10,11 @@ use crm_stat::{
 use futures::StreamExt as _;
 use prost_types::Timestamp;
 use sqlx_db_tester::TestPg;
-use tonic::transport::Server;
-
-const PORT_BASE: u32 = 60002;
+use tonic::transport::{Server, server::TcpIncoming};
 
 #[tokio::test]
 async fn test_raw_query_should_work() -> Result<()> {
-    let (_tdb, addr) = start_server(PORT_BASE).await?;
+    let (_tdb, addr) = start_server().await?;
 
     let mut client = UserStatServiceClient::connect(format!("http://{}", addr)).await?;
 
@@ -36,7 +34,7 @@ async fn test_raw_query_should_work() -> Result<()> {
 
 #[tokio::test]
 async fn test_query_should_work() -> Result<()> {
-    let (_tdb, addr) = start_server(PORT_BASE).await?;
+    let (_tdb, addr) = start_server().await?;
 
     let mut client = UserStatServiceClient::connect(format!("http://{}", addr)).await?;
 
@@ -71,14 +69,22 @@ async fn test_query_should_work() -> Result<()> {
     Ok(())
 }
 
-async fn start_server(port: u32) -> Result<(TestPg, SocketAddr)> {
-    let addr = format!("[::1]:{}", port).parse()?;
+async fn start_server() -> Result<(TestPg, SocketAddr)> {
+    // 1. 绑定监听器
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await?;
+    // 2. 立即获取实际分配的地址
+    let addr = listener.local_addr()?;
+
     let (tdb, svc) = UserStat::test_new().await?;
 
     tokio::spawn(async move {
+        // 3. 关键：使用 serve_with_incoming 而不是 serve
+        // 这会直接使用我们已经 bind 好的 listener，不会发生二次绑定导致的端口抢占
+        let incoming = TcpIncoming::from(listener);
+
         Server::builder()
             .add_service(svc.into_server())
-            .serve(addr)
+            .serve_with_incoming(incoming) // 直接接管 listener
             .await
             .unwrap();
     });
