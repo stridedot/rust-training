@@ -48,5 +48,7 @@ async fn start_server(port: u32) -> Result<SocketAddr> {
             .unwrap();
     });
 
+    tokio::time::sleep(std::time::Duration::from_millis(50)).await;
+
     Ok(addr)
 }

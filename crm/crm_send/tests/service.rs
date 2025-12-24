@@ -12,7 +12,7 @@ use crm_send::{
 use futures::StreamExt as _;
 use tonic::transport::Server;
 
-const PORT_BASE: u32 = 60003;
+const PORT_BASE: u32 = 6003;
 
 #[tokio::test]
 async fn test_send_should_work() -> Result<()> {
@@ -57,6 +57,8 @@ async fn start_server(port: u32) -> Result<SocketAddr> {
             .await
             .unwrap();
     });
+
+    tokio::time::sleep(std::time::Duration::from_millis(50)).await;
 
     Ok(addr)
 }

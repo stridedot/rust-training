@@ -35,7 +35,7 @@ async fn test_raw_query_should_work() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_query_should_fail() -> Result<()> {
+async fn test_query_should_work() -> Result<()> {
     let (_tdb, addr) = start_server(PORT_BASE).await?;
 
     let mut client = UserStatServiceClient::connect(format!("http://{}", addr)).await?;
@@ -82,6 +82,8 @@ async fn start_server(port: u32) -> Result<(TestPg, SocketAddr)> {
             .await
             .unwrap();
     });
+
+    tokio::time::sleep(std::time::Duration::from_millis(50)).await;
 
     Ok((tdb, addr))
 }
