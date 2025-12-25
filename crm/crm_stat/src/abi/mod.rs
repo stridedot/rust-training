@@ -1,4 +1,6 @@
-use chrono::{SecondsFormat, TimeZone as _, Utc};
+use std::collections::HashMap;
+
+use chrono::{DateTime, SecondsFormat, TimeZone as _, Utc};
 use prost_types::Timestamp;
 use tonic::{Response, Status};
 
@@ -93,6 +95,30 @@ fn ids_query(name: &str, ids: &[u32]) -> String {
     }
 
     format!(" and array{:?} <@ {}", ids, name)
+}
+
+impl QueryRequest {
+    pub fn new_with_dt(field: &str, d1: DateTime<Utc>, d2: DateTime<Utc>) -> Self {
+        let ts1 = Timestamp {
+            seconds: d1.timestamp(),
+            nanos: 0,
+        };
+
+        let ts2 = Timestamp {
+            seconds: d2.timestamp(),
+            nanos: 0,
+        };
+
+        let tq = TimeQuery {
+            lower: Some(ts1),
+            upper: Some(ts2),
+        };
+
+        Self {
+            timestamps: HashMap::from([(field.to_string(), tq)]),
+            ids: Default::default(),
+        }
+    }
 }
 
 #[cfg(test)]

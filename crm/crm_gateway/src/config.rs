@@ -17,11 +17,18 @@ pub struct ServerConfig {
     pub metadata_url: String,
     pub notify_url: String,
     pub pg_url: String,
+    pub tls: Option<TlsConfig>,
 }
 
 #[derive(Deserialize)]
 pub struct AuthConfig {
     pub verify_key: String,
+}
+
+#[derive(Deserialize)]
+pub struct TlsConfig {
+    pub cert: String,
+    pub key: String,
 }
 
 impl AppConfig {

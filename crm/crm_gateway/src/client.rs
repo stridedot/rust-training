@@ -2,15 +2,28 @@ use crm_gateway::{
     config::AppConfig,
     pb::crm::{WelcomeRequest, crm_service_client::CrmServiceClient},
 };
-use tonic::Request;
+use tonic::{
+    Request,
+    transport::{Certificate, Channel, ClientTlsConfig},
+};
 use uuid::Uuid;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let config = AppConfig::load()?;
 
-    let addr = format!("http://localhost:{}", config.server.crm_gateway_port);
-    let mut client = CrmServiceClient::connect(addr.clone()).await?;
+    let pem = include_str!("../../fixtures/rootCA.pem");
+    let tls = ClientTlsConfig::new()
+        .ca_certificate(Certificate::from_pem(pem))
+        .domain_name("localhost");
+
+    let addr = format!("https://localhost:{}", config.server.crm_gateway_port);
+    let channel = Channel::from_shared(addr.clone())?
+        .tls_config(tls)?
+        .connect()
+        .await?;
+
+    let mut client = CrmServiceClient::new(channel);
     println!("addr: {}", addr);
 
     let req = Request::new(WelcomeRequest {

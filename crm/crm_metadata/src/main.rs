@@ -17,6 +17,7 @@ async fn main() -> anyhow::Result<()> {
     let svc = crm_metadata.into_server();
 
     let addr = format!("[::1]:{}", port).parse()?;
+    tracing::info!("metadata server is running on: {}", addr);
 
     Server::builder().add_service(svc).serve(addr).await?;
 

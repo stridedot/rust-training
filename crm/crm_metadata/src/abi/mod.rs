@@ -1,9 +1,11 @@
+use std::collections::HashSet;
+
 use chrono::{DateTime, Days, Utc};
 use fake::{
     Fake, Faker,
     faker::{chrono::en::DateTimeBetween, lorem::zh_cn::Sentence, name::zh_cn},
 };
-use futures::{Stream, StreamExt as _};
+use futures::{Stream, StreamExt as _, stream};
 use prost_types::Timestamp;
 use rand::Rng;
 use tokio::sync::mpsc;
@@ -90,6 +92,13 @@ fn created_at() -> Option<Timestamp> {
         seconds: date.timestamp(),
         nanos: date.timestamp_subsec_nanos() as _,
     })
+}
+
+impl MaterializeRequest {
+    pub fn new_with_ids(ids: Vec<u32>) -> impl Stream<Item = Self> {
+        let reqs: HashSet<_> = ids.into_iter().map(|id| Self { id }).collect();
+        stream::iter(reqs)
+    }
 }
 
 #[cfg(test)]

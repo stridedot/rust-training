@@ -1,4 +1,4 @@
-use crm_stat::{UserStat, config::AppConfig};
+use crm_send::{Notification, config::AppConfig};
 use tonic::transport::Server;
 use tracing::level_filters::LevelFilter;
 use tracing_subscriber::{
@@ -11,13 +11,13 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::registry().with(console).init();
 
     let config = AppConfig::load()?;
-    let port = config.server.user_stat_port;
+    let port = config.server.notify_port;
 
-    let user_stat = UserStat::try_new(config).await?;
-    let svc = user_stat.into_server();
+    let notification = Notification::new(config).await;
+    let svc = notification.into_server();
 
     let addr = format!("[::1]:{}", port).parse()?;
-    tracing::info!("user stat server is running on: {}", addr);
+    tracing::info!("notification server is running on: {}", addr);
 
     Server::builder().add_service(svc).serve(addr).await?;
 
