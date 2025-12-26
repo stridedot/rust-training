@@ -4,6 +4,7 @@ use crm_gateway::{
 };
 use tonic::{
     Request,
+    metadata::MetadataValue,
     transport::{Certificate, Channel, ClientTlsConfig},
 };
 use uuid::Uuid;
@@ -23,7 +24,13 @@ async fn main() -> anyhow::Result<()> {
         .connect()
         .await?;
 
-    let mut client = CrmServiceClient::new(channel);
+    let token = include_str!("../../fixtures/token").trim();
+    let token: MetadataValue<_> = format!("Bearer {}", token).parse()?;
+
+    let mut client = CrmServiceClient::with_interceptor(channel, move |mut req: Request<()>| {
+        req.metadata_mut().insert("authorization", token.clone());
+        Ok(req)
+    });
     println!("addr: {}", addr);
 
     let req = Request::new(WelcomeRequest {

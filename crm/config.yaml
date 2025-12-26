@@ -71,4 +71,11 @@ server:
       -----END PRIVATE KEY-----
 
 auth:
-  verify_key: "verify-key"
+  sign_key: |
+    -----BEGIN PRIVATE KEY-----
+    MC4CAQAwBQYDK2VwBCIEIMnlSXiv8bTSgHwsuyEynQBsX6i4PtvW8n9/I55CmtPE
+    -----END PRIVATE KEY-----
+  verify_key: |
+    -----BEGIN PUBLIC KEY-----
+    MCowBQYDK2VwAyEAFxNBlNS2fA6RCtuXQFhIbz/pri8MEqmWFpdTezEAbmI=
+    -----END PUBLIC KEY-----

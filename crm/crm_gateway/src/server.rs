@@ -17,7 +17,7 @@ async fn main() -> anyhow::Result<()> {
 
     let tls = mem::take(&mut config.server.tls);
 
-    let svc = CrmGateway::try_new(config).await?.into_server();
+    let svc = CrmGateway::try_new(config).await?.into_server()?;
 
     if let Some(tls) = tls {
         let identity = Identity::from_pem(tls.cert, tls.key);

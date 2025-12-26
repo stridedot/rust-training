@@ -651,6 +651,7 @@ dependencies = [
  "crm_send",
  "crm_stat",
  "futures",
+ "jwt-simple",
  "prost",
  "prost-types",
  "serde",

@@ -8,6 +8,8 @@ use tokio::sync::mpsc;
 use tokio_stream::wrappers::ReceiverStream;
 use tonic::{Response, Status};
 
+pub mod auth;
+
 use crate::{
     CrmGateway,
     pb::crm::{WelcomeRequest, WelcomeResponse},

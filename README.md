@@ -24,7 +24,7 @@
 - 简单 nginx 服务器
 - sqlx 的简单使用
 - 聊天服务器
-- crm 微服务
+- crm 微服务（TLS/nginx）
 
 ### chat 聊天服务
 

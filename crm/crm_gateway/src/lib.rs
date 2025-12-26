@@ -3,9 +3,13 @@ use anyhow::Result;
 use crm_metadata::pb::metadata::metadata_service_client::MetadataServiceClient;
 use crm_send::pb::notification::notification_service_client::NotificationServiceClient;
 use crm_stat::pb::user_stat::user_stat_service_client::UserStatServiceClient;
-use tonic::{Request, Response, Status, async_trait, transport::Channel};
+use tonic::{
+    Request, Response, Status, async_trait, service::interceptor::InterceptedService,
+    transport::Channel,
+};
 
 use crate::{
+    abi::auth::{DecodingKey, User},
     config::AppConfig,
     pb::crm::{
         RecallRequest, RecallResponse, RemindRequest, RemindResponse, WelcomeRequest,
@@ -32,6 +36,12 @@ impl CrmService for CrmGateway {
         &self,
         request: Request<WelcomeRequest>,
     ) -> Result<Response<WelcomeResponse>, Status> {
+        let user: &User = request
+            .extensions()
+            .get()
+            .ok_or_else(|| Status::internal("User context missing"))?;
+        tracing::info!("User: {:?}", user);
+
         self.welcome(request.into_inner()).await
     }
 
@@ -71,7 +81,9 @@ impl CrmGateway {
         })
     }
 
-    pub fn into_server(self) -> CrmServiceServer<Self> {
-        CrmServiceServer::new(self)
+    pub fn into_server(self) -> Result<InterceptedService<CrmServiceServer<Self>, DecodingKey>> {
+        let decoding_key = crate::abi::auth::DecodingKey::load(&self.config.auth.verify_key)?;
+
+        Ok(CrmServiceServer::with_interceptor(self, decoding_key))
     }
 }

@@ -21,6 +21,7 @@ crm_stat = { workspace = true }
 anyhow = { workspace = true }
 chrono = { workspace = true }
 futures = { workspace = true }
+jwt-simple = { workspace = true }
 prost = { workspace = true }
 prost-types = { workspace = true }
 serde = { workspace = true }
