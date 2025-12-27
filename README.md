@@ -25,6 +25,8 @@
 - sqlx 的简单使用
 - 聊天服务器
 - crm 微服务（TLS/nginx）
+- 处理数据
+    - 使用 arrow 处理 ndjson 数据
 
 ### chat 聊天服务
 

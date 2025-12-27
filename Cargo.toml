@@ -12,6 +12,7 @@ members = [
     "crm/crm_metadata",
     "crm/crm_send",
     "crm/crm_stat",
+    "taotie",
 ]
 resolver = "3"
 
